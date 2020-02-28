@@ -1,0 +1,18 @@
+<!-- # Copyright 2019 Pavlov Media
+     # Copyright (C) 2019 Open Source Integrators
+     # License Proprietary. Do not copy, share nor distribute. -->
+<odoo>
+
+    <record id="hr_employee_form_expense_level" model="ir.ui.view">
+        <field name="name">hr.employee.form.expense.level</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <!-- Change Customer to Contact -->
+            <field name="expense_manager_id" position="after">
+                <field name="expense_corporate_id"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

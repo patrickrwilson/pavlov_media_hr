@@ -1,0 +1,26 @@
+<!-- # Copyright 2019 Pavlov Media
+     # Copyright (C) 2019 Open Source Integrators
+     # License Proprietary. Do not copy, share nor distribute. -->
+<odoo>
+
+    <record id="pavlov_media_timesheet_view_list" model="ir.ui.view">
+        <field name="model">account.analytic.line</field>
+        <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_tree"/>
+        <field name="arch" type="xml">
+            <!-- add columns to list -->
+            <field name="project_id" position="before">
+                <field name="helpdesk_ticket_id"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="pavlov_media_timesheet_view_form" model="ir.ui.view">
+        <field name="model">account.analytic.line</field>
+        <field name="inherit_id" ref="timesheet_grid.timesheet_view_form"/>
+        <field name="arch" type="xml">
+            <field name="project_id" position="before">
+                <field name="helpdesk_ticket_id"/>
+            </field>
+        </field>
+    </record>
+</odoo>
