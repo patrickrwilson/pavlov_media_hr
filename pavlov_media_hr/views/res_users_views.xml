@@ -21,6 +21,21 @@
         <field name="model">res.users</field>
         <field name="inherit_id" ref="base.view_users_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//notebook" position="before">
+                <group>
+                    <field name="user_template_id" domain="[('name', 'ilike', 'Template'),('id','!=', active_id)]"/>
+                </group>
+                <div class="alert alert-info text-center mb-3" attrs="{'invisible': [('user_template_id', '=', False)]}" role="alert">
+                    Warning - Template Set: User group permissions are managed from the user template. If the template's permissions change, then so will this user's group permissions. If this user needs to have different permissions than the template, then clear the 'User Template' field.
+                </div>
+            </xpath>
+            <xpath expr="//page[@name='access_rights']" position="after">
+                <page string="Users" attrs="{'invisible': [('child_user_ids', '=', [])]}">
+                    <group string="Users Assigned to this Template">
+                        <field name="child_user_ids" nolabel ="1" readonly="1"/>
+                    </group>
+                </page>
+            </xpath>
             <xpath expr="//page[@name='access_rights']" position="after">
                 <page string="Employee Information">
                     <group string="General Information">
@@ -91,4 +106,32 @@
             </filter>
         </field>
      </record>
+
+    <record id="pavlov_media_user_template_update_children" model="base.automation">
+        <field name="name">User Template: Update Children When Groups Change</field>
+        <field name="model_id" ref="base.model_res_users"/>
+        <field name="trigger">on_write</field>
+        <field name="active" eval="True"/>
+        <field name="state">code</field>
+        <field name="code">
+record = model.browse(env.context['active_id'])
+if record.child_user_ids:
+    for child in record.child_user_ids:
+      if child.groups_id.ids != record.groups_id.ids:
+        child.write({'groups_id': [(6, 0, record.groups_id.ids)]})
+        </field>
+    </record>
+
+    <record id="pavlov_media_user_template_update_self" model="base.automation">
+        <field name="name">User Template: Update Groups when Template Change</field>
+        <field name="model_id" ref="base.model_res_users"/>
+        <field name="trigger">on_write</field>
+        <field name="active" eval="True"/>
+        <field name="state">code</field>
+        <field name="code">
+record = model.browse(env.context['active_id'])
+if record.user_template_id:
+  record.sudo().write({'groups_id': [(6, 0, record.user_template_id.groups_id.ids)]})
+        </field>
+    </record>
 </odoo>

@@ -11,6 +11,7 @@
     'website': 'https://www.pavlovmedia.com',
     'depends': [
         'helpdesk',
+        'helpdesk_timesheet',
         'hr_appraisal',
         'hr_attendance',
         'hr_expense',

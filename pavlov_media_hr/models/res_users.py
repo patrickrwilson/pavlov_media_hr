@@ -11,6 +11,10 @@ class Users(models.Model):
     hr_job_title = fields.Char("Job Title")
     hr_department_id = fields.Many2one('hr.department', string="Department")
     hr_parent_id = fields.Many2one('hr.employee', string="Manager")
+    user_template_id = fields.Many2one('res.users', string="User Template")
+    child_user_ids = fields.One2many('res.users',
+                                     'user_template_id',
+                                     string="Users")
 
     @api.onchange('hr_job_title',
                   'hr_job_id',
