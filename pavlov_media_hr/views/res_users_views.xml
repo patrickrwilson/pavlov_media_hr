@@ -75,6 +75,9 @@
                                    attrs="{'invisible': [('employee', '=', False)]}"/>
                         </group>
                     </group>
+                    <group string="Sales">
+                        <field name="sale_team_id"/>
+                    </group>
                 </page>
             </xpath>
         </field>
@@ -131,7 +134,8 @@ if record.child_user_ids:
         <field name="code">
 record = model.browse(env.context['active_id'])
 if record.user_template_id:
-  record.sudo().write({'groups_id': [(6, 0, record.user_template_id.groups_id.ids)]})
+  if record.groups_id.ids != record.user_template_id.groups_id.ids:
+    record.write({'groups_id': [(6, 0, record.user_template_id.groups_id.ids)]})
         </field>
     </record>
 </odoo>
