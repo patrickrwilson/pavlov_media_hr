@@ -38,3 +38,24 @@ class Users(models.Model):
     def _onchange_state(self):
         if self.state_id.country_id:
             self.country_id = self.state_id.country_id
+
+    @api.multi
+    def action_create_new_user(self):
+        for rec in self:
+            default_vals = {
+                "name": "NEW USER - ChangeMe",
+                "login": "new_user@changeme.com",
+                "active": False,
+                "user_template_id": rec.id,
+            }
+            new_user = rec.copy(default=default_vals)
+        form_view_id = self.env.ref("base.view_users_form").id
+        return {
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'res.users',
+            'target': 'current',
+            'res_id': new_user.id,
+            'views': [(form_view_id, 'form')],
+            'type': 'ir.actions.act_window'
+        }
