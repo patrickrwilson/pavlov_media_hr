@@ -12,6 +12,10 @@
             <field name="expense_manager_id" position="after">
                 <field name="expense_corporate_id"/>
             </field>
+            <field name="user_id" position="after">
+                <field name="default_operating_unit_id"/>
+                <field name="operating_unit_ids" widget="many2many_tags"/>
+            </field>
         </field>
     </record>
 

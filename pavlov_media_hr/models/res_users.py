@@ -47,6 +47,7 @@ class Users(models.Model):
                 "login": "new_user@changeme.com",
                 "active": False,
                 "user_template_id": rec.id,
+                "default_operating_unit_id": rec.default_operating_unit_id.id
             }
             new_user = rec.copy(default=default_vals)
         form_view_id = self.env.ref("base.view_users_form").id
@@ -59,3 +60,18 @@ class Users(models.Model):
             'views': [(form_view_id, 'form')],
             'type': 'ir.actions.act_window'
         }
+
+    @api.multi
+    def write(self, values):
+        for rec in self:
+            if values.get('user_template_id', False):
+                template = self.env['res.users'].browse(
+                    values.get('user_template_id'))
+                values.update({
+                    'groups_id': [(6, 0, template.groups_id.ids)],
+                    'default_operating_unit_id':
+                        template.default_operating_unit_id.id,
+                    'operating_unit_ids':
+                        [(6, 0, template.operating_unit_ids.ids)]
+                })
+            return super(Users, rec).write(values)

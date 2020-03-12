@@ -18,6 +18,7 @@
         'hr_expense_operating_unit',
         'hr_holidays',
         'hr_timesheet',
+        'operating_unit',
         'timesheet_grid',
     ],
     'data': [
